@@ -23,6 +23,20 @@ internal class Program
         return true;
     }
 
+    public static bool StartFunc(Func<User, bool> test, User user)
+    {
+        test(user);
+        Console.WriteLine("Start");
+        return true;
+    }
+
+    public static bool StartAction(Action<User> test, User user)
+    {
+        test(user);
+        Console.WriteLine("Start");
+        return true;
+    }
+
     private static void Main(string[] args)
     {
         User user = new User()
@@ -33,6 +47,42 @@ internal class Program
             Type = "sms",
         };
 
+        NewMethod(user);
+
+        FuncMethod(user);
+
+        ActionMethod(user);
+
+        Console.ReadKey();
+
+    }
+
+
+
+    public static bool SMS(User user)
+    {
+        Console.WriteLine("Send with sms");
+        return true;
+    }
+
+    public static bool Email(User user)
+    {
+        Console.WriteLine("Send with mail");
+        return true;
+    }
+
+    public static void Sms(User user)
+    {
+        Console.WriteLine("Send with sms");
+    }
+
+    public static void email(User user)
+    {
+        Console.WriteLine("Send with mail");
+    }
+
+    private static void NewMethod(User user)
+    {
         switch (user.Type)
         {
             case "mail":
@@ -55,22 +105,48 @@ internal class Program
                 var rere = static bool (User user) => user.Id == 1;
                 rere.Invoke(user);
                 break;
-
         }
-
-
-        Console.ReadKey();
     }
 
-    public static bool SMS(User user)
+    public static void FuncMethod(User user)
     {
-        Console.WriteLine("Send with sms");
-        return true;
+        switch (user.Type)
+        {
+            case "mail":
+                StartFunc(Email, user);
+                break;
+
+            case "sms":
+                StartFunc(SMS, user);
+                break;
+            default:
+                StartFunc(bool (User user) =>
+                {
+                    Console.WriteLine("Send with sms");
+                    return true;
+                }, user);
+                break;
+        }
     }
 
-    public static bool Email(User user)
+    public static void ActionMethod(User user)
     {
-        Console.WriteLine("Send with mail");
-        return true;
+        switch (user.Type)
+        {
+            case "mail":
+                StartAction(email, user);
+                break;
+
+            case "sms":
+                StartAction(Sms, user);
+                break;
+            default:
+                StartAction((User user) =>
+                {
+                    Console.WriteLine("Send with sms");
+                }, user);
+                break;
+        }
     }
+
 }
