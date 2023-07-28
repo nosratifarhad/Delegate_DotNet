@@ -119,12 +119,17 @@ internal class Program
             case "sms":
                 StartFunc(SMS, user);
                 break;
-            default:
-                StartFunc(bool (User user) =>
+            case "none":
+                Start(bool (User user) =>
                 {
                     Console.WriteLine("Send with sms");
                     return true;
                 }, user);
+                break;
+
+            default:
+                var rere = static bool (User user) => user.Id == 1;
+                rere.Invoke(user);
                 break;
         }
     }
